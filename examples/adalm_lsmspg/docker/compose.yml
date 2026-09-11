@@ -8,10 +8,7 @@ services:
     privileged: true
     network_mode: host
     ipc: host
-    volumes:
-      - /var/run/dbus:/var/run/dbus
-      - /var/run/avahi-daemon:/var/run/avahi-daemon
-    command: ros2 run adi_iio adi_iio_node --ros-args -p uri:="ip:analog.local"
+    command: ros2 run adi_iio adi_iio_node --ros-args -p uri:="ip:127.0.0.1"
 
   demo:
     image: adalm_lsmspg:latest
