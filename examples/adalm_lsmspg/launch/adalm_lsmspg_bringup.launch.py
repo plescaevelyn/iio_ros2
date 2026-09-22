@@ -66,17 +66,36 @@ def generate_launch_description():
         }],
     )
 
-    sweep_generator_node = Node(
+    pid_controller_node = Node(
         package='adalm_lsmspg',
-        executable='sweep_generator',
-        name='sweep_generator',
+        executable='pid_controller',
+        name='pid_controller',
         output='screen',
         parameters=[{
-            'sweep_rate_hz': 0.5,
-            'min_angle': 0.0,
-            'max_angle': 180.0,
+            'kp': 1.0,
+            'ki': 0.1,
+            'kd': 0.05,
+            'output_min': 0.0,
+            'output_max': 180.0,
+            'integral_max': 50.0,
+            'update_rate_hz': 20.0,
+            'setpoint_topic': 'servo/setpoint',
+            'feedback_topic': 'servo/joint_state',
+            'command_topic': 'servo/position_cmd',
+        }],
+    )
+
+    step_generator_node = Node(
+        package='adalm_lsmspg',
+        executable='step_generator',
+        name='step_generator',
+        output='screen',
+        parameters=[{
+            'setpoint_a': 45.0,
+            'setpoint_b': 135.0,
+            'dwell_time': 10.0,
+            'setpoint_topic': 'servo/setpoint',
             'update_rate_hz': 10.0,
-            'position_topic': 'servo/position_cmd',
         }],
     )
 
@@ -85,7 +104,8 @@ def generate_launch_description():
         actions=[
             servo_commander_node,
             servo_feedback_node,
-            sweep_generator_node,
+            pid_controller_node,
+            step_generator_node,
         ],
     )
 
